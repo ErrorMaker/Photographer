@@ -2,8 +2,6 @@ package com.hypermine.habbo.photographer;
 
 import com.hypermine.habbo.photographer.messages.ServerMessage;
 import com.hypermine.habbo.photographer.util.crypto.HabboEncryption;
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
 
 /**
@@ -19,17 +17,8 @@ public class Session {
 
     public void sendMessage(ServerMessage msg) {
         System.out.println(String.format("OUTGOING [%d] - %s", msg.getHeader(), msg.getBodyString()));
-        ByteBuf buffer = msg.get().copy();
-        byte[] message = new byte[buffer.readableBytes()];
-        int i = 0;
-        while (buffer.isReadable()) {
-            message[i]= buffer.readByte();
-            i++;
-        }
         if (habboEncryption.canEncrypt) {
-            ByteBuf crypted = Unpooled.buffer();
-            crypted.writeBytes(habboEncryption.rc4.parse(message));
-            ch.write(crypted);
+            ch.write(habboEncryption.rc4.decipher(msg.get()));
         } else {
             ch.write(msg.get());
         }

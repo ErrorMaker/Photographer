@@ -32,6 +32,8 @@ public class PacketManager {
         if (ctx == null) return;
 
         try {
+            System.out.println(String.format("INCOMING [%s] - %s", packet.getMessageId(), packet.getMessageBody()));
+
             if (this.isRegistered(packet.getMessageId())) {
                 final MessageHandler handler = this.incoming.get(packet.getMessageId()).newInstance();
 
@@ -42,8 +44,7 @@ public class PacketManager {
         } catch(Exception e) {
             e.printStackTrace();
         } finally {
-            packet.getBuffer().resetReaderIndex();
-            System.out.println(String.format("INCOMING [%s] - %s", packet.getMessageId(), packet.getMessageBody()));
+//            packet.getBuffer().resetReaderIndex();
         }
     }
 

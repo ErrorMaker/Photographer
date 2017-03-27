@@ -5,6 +5,7 @@ package com.hypermine.habbo.photographer.util.crypto;
  */
 
 import java.math.BigInteger;
+import java.util.Arrays;
 
 public class HabboEncryption
 {
@@ -37,7 +38,7 @@ public class HabboEncryption
     public void InitCrypto(String publicKey) {
         dh.GenerateSharedKey(rsaKey.decrypt(publicKey));
         rc4 = new RC4();
-        rc4.init(dh.SharedKey.toByteArray());
+        rc4.init(dh.SharedKey.toString().getBytes());
         canEncrypt = true;
     }
 }
