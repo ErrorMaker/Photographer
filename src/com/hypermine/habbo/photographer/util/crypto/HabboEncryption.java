@@ -20,15 +20,10 @@ public class HabboEncryption
 
     public void VerifyDHPrimes(String prime, String generator)
     {
-        //BigInteger exp = exponent;
         BigInteger primeDec = new BigInteger(rsaKey.decrypt(prime));
         BigInteger generatorDec = new BigInteger(rsaKey.decrypt(generator));
 
         dh = new DiffieHellman(primeDec, generatorDec);
-
-        System.out.println(rsaKey.encrypt(dh.PublicKey.toString()));
-
-        //return rsaKey.encrypt(dh.PublicKey.toString());
     }
 
     public String GetDHPublic() {
@@ -37,8 +32,7 @@ public class HabboEncryption
 
     public void InitCrypto(String publicKey) {
         dh.GenerateSharedKey(rsaKey.decrypt(publicKey));
-        rc4 = new RC4();
-        rc4.init(dh.SharedKey.toString().getBytes());
+        rc4 = new RC4(dh.SharedKey.toByteArray());
         canEncrypt = true;
     }
 }

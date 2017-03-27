@@ -179,7 +179,6 @@ public class RSAKey {
     public byte[] decrypt(String ctext, int size)
     {
         BigInteger c = new BigInteger(ctext, size);
-//        c = new BigInteger(pkcs1pad2(c.toByteArray(), this.getBlockSize()));
         BigInteger m = this.doPublic(c);
         if (m.equals(BigInteger.ZERO))
         {
