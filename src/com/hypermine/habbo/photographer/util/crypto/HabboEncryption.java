@@ -11,7 +11,7 @@ public class HabboEncryption
     public String GetHandshakePublic(String prime, String generator)
     {
         //BigInteger exp = exponent;
-        RSAKey key = RSAKey.parsePublicKey("e052808c1abef69a1a62c396396b85955e2ff522f5157639fa6a19a98b54e0e4d6e44f44c4c0390fee8ccf642a22b6d46d7228b10e34ae6fffb61a35c11333780af6dd1aaafa7388fa6c65b51e8225c6b57cf5fbac30856e896229512e1f9af034895937b2cb6637eb6edf768c10189df30c10d8a3ec20488a198063599ca6ad", "65537");
+        RSAKey key = RSAKey.parsePublicKey("e052808c1abef69a1a62c396396b85955e2ff522f5157639fa6a19a98b54e0e4d6e44f44c4c0390fee8ccf642a22b6d46d7228b10e34ae6fffb61a35c11333780af6dd1aaafa7388fa6c65b51e8225c6b57cf5fbac30856e896229512e1f9af034895937b2cb6637eb6edf768c10189df30c10d8a3ec20488a198063599ca6ad", 65537);
         BigInteger primeDec = new BigInteger(key.decrypt(prime));
         BigInteger generatorDec = new BigInteger(key.decrypt(generator));
 
@@ -19,7 +19,7 @@ public class HabboEncryption
 
         System.out.println(dh.PublicKey.toString(16));
 
-        return dh.PublicKey.toString(16);
+        return key.encrypt(dh.PublicKey.toString(16));
 
 //        BigInteger shared = GenerateDHKeys(primeDec, generatorDec);
 //        BigInteger DHPublic = GenerateDHKeys(primeDec, generatorDec);

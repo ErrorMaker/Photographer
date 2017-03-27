@@ -33,9 +33,9 @@ public class RSAKey {
         this.canDecrypt = (canEncrypt && (!((this.d == null))));
     }
 
-    public static RSAKey parsePublicKey(String n, String e)
+    public static RSAKey parsePublicKey(String n, int e)
     {
-        return (new RSAKey(new BigInteger(n, 16), Integer.parseInt(e), null, null, null, null, null, null));
+        return (new RSAKey(new BigInteger(n, 16), e, null, null, null, null, null, null));
     }
 
     public static RSAKey parsePrivateKey(String n, String e, String d, String p, String q, String Dmp1, String Dmq1, String Coeff)
@@ -181,14 +181,14 @@ public class RSAKey {
     public byte[] decrypt(String ctext, int size)
     {
         BigInteger c = new BigInteger(ctext, size);
-        c = new BigInteger(pkcs1pad2(c.toByteArray(), this.getBlockSize()));
+//        c = new BigInteger(pkcs1pad2(c.toByteArray(), this.getBlockSize()));
         BigInteger m = this.doPublic(c);
         if (m.equals(BigInteger.ZERO))
         {
             return null;
         }
 
-        byte[] bytes = m.toByteArray();
+        byte[] bytes = this.pkcs1unpad2(m, this.getBlockSize());
 
         if (bytes == null)
         {
@@ -196,6 +196,30 @@ public class RSAKey {
         }
 
         return bytes;
+    }
+
+    private byte[] pkcs1unpad2(BigInteger src, int n) {
+        byte[] bytes = src.toByteArray();
+        byte[] out;
+        int i = 0;
+        while (i < bytes.length && bytes[i] == 0) {
+            ++i;
+        }
+        if (bytes.length - i != n - 1 || bytes[i] > 2) {
+            return null;
+        }
+        ++i;
+        while (bytes[i] != 0) {
+            if (++i >= bytes.length) {
+                return null;
+            }
+        }
+        out = new byte[(bytes.length - i) + 1];
+        int p = 0;
+        while (++i < bytes.length) {
+            out[p++] = (bytes[i]);
+        }
+        return out;
     }
 
     public static byte[] pkcs1unpad(final BigInteger src, int n) {
