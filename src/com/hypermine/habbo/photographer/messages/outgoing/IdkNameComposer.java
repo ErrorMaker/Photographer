@@ -16,6 +16,7 @@ public class IdkNameComposer extends MessageComposer {
     public ServerMessage compose() {
         this.response.init(539);
         this.response.appendString(sharedKey);
+
         return this.response;
     }
 }

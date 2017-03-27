@@ -83,10 +83,33 @@ public class RSAKey {
     {
         if (this.canEncrypt)
         {
-            return x.modPow(new BigInteger("0" + this.e, 16), this.n);
+            return x.modPow(BigInteger.valueOf(65537), this.n);
         }
 
         return BigInteger.ZERO;
+    }
+
+    public String encrypt(BigInteger value)
+    {
+        BigInteger m = new BigInteger(this.pkcs1pad2(value.toByteArray(), this.getBlockSize()));
+        if (m.equals(BigInteger.ZERO))
+        {
+            return null;
+        }
+
+        BigInteger c = this.doPublic(m);
+        if (c.equals(BigInteger.ZERO))
+        {
+            return null;
+        }
+
+        String result = c.toString(16);
+        if ((result.length() & 1) == 0)
+        {
+            return result;
+        }
+
+        return "0" + result;
     }
 
     public String encrypt(String text)
@@ -96,7 +119,9 @@ public class RSAKey {
             //Console.WriteLine("RSA Encrypt: Message is to big!");
         }
 
-        BigInteger m = new BigInteger(this.pkcs1pad2(text.getBytes(), this.getBlockSize()));
+        BigInteger value = new BigInteger(text, 16);
+
+        BigInteger m = new BigInteger(this.pkcs1pad2(value.toByteArray(), this.getBlockSize()));
         if (m.equals(BigInteger.ZERO))
         {
             return null;
@@ -148,28 +173,29 @@ public class RSAKey {
         return BigInteger.ZERO;
     }
 
-    public String decrypt(String ctext)
+    public byte[] decrypt(String ctext)
     {
         return this.decrypt(ctext, 16);
     }
 
-    public String decrypt(String ctext, int size)
+    public byte[] decrypt(String ctext, int size)
     {
         BigInteger c = new BigInteger(ctext, size);
+        c = new BigInteger(pkcs1pad2(c.toByteArray(), this.getBlockSize()));
         BigInteger m = this.doPublic(c);
         if (m.equals(BigInteger.ZERO))
         {
             return null;
         }
 
-        byte[] bytes = pkcs1unpad(m, this.getBlockSize());
+        byte[] bytes = m.toByteArray();
 
         if (bytes == null)
         {
             return null;
         }
 
-        return bytes.toString();
+        return bytes;
     }
 
     public static byte[] pkcs1unpad(final BigInteger src, int n) {
