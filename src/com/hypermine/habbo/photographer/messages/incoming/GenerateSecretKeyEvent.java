@@ -1,7 +1,5 @@
 package com.hypermine.habbo.photographer.messages.incoming;
 
-import com.hypermine.habbo.photographer.messages.ServerMessage;
-import com.hypermine.habbo.photographer.messages.outgoing.IdkNameComposer;
 import com.hypermine.habbo.photographer.util.crypto.HabboEncryption;
 
 /**
@@ -13,7 +11,7 @@ public class GenerateSecretKeyEvent extends MessageHandler {
         String prime = this.packet.readString();
         String gen = this.packet.readString();
 
-        String sharedKey = new HabboEncryption().GetSharedKey(prime, gen);
+        String sharedKey = new HabboEncryption().GetHandshakePublic(prime, gen);
 
         ctx.sharedKey = sharedKey;
 

@@ -5,30 +5,30 @@ package com.hypermine.habbo.photographer.util.crypto;
  */
 
 import java.math.BigInteger;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
 
 public class HabboEncryption
 {
-    public String GetSharedKey(String prime, String generator)
+    public String GetHandshakePublic(String prime, String generator)
     {
         //BigInteger exp = exponent;
         RSAKey key = RSAKey.parsePublicKey("e052808c1abef69a1a62c396396b85955e2ff522f5157639fa6a19a98b54e0e4d6e44f44c4c0390fee8ccf642a22b6d46d7228b10e34ae6fffb61a35c11333780af6dd1aaafa7388fa6c65b51e8225c6b57cf5fbac30856e896229512e1f9af034895937b2cb6637eb6edf768c10189df30c10d8a3ec20488a198063599ca6ad", "65537");
-        String decPrime = bytesToHex(key.decrypt(prime));
-        String decGen = bytesToHex(key.decrypt(generator));
-        BigInteger primeEnc = new BigInteger(decPrime, 16);
-        BigInteger genEnc = new BigInteger(decGen, 16);
+        BigInteger primeDec = new BigInteger(key.decrypt(prime));
+        BigInteger generatorDec = new BigInteger(key.decrypt(generator));
 
-//        BigInteger shared = GenerateDHKeys(primeEnc, genEnc);
-        BigInteger DHPublic = GenerateDHKeys(primeEnc, genEnc);
-        System.out.println(DHPublic.toString(16));
-        String shared = key.encrypt(DHPublic);
+        DiffieHellman dh = new DiffieHellman(primeDec, generatorDec);
 
-        System.out.println(shared);
+        System.out.println(dh.PublicKey.toString(16));
 
-        return shared;
+        return dh.PublicKey.toString(16);
+
+//        BigInteger shared = GenerateDHKeys(primeDec, generatorDec);
+//        BigInteger DHPublic = GenerateDHKeys(primeDec, generatorDec);
+//        System.out.println(DHPublic.toString(16));
+//        String shared = key.encrypt(DHPublic);
+//
+//        System.out.println(shared);
+//
+//        return shared;
 
 //        try {
 //            BigInteger DHPrime = Decrypt(prime);
