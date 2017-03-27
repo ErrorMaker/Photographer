@@ -12,17 +12,13 @@ public class RC4 {
     private int j = 0;
     private int[] table;
 
-    public RC4() {
-        this.table = new int[POOL_SIZE];
-    }
-
-    public RC4(byte[] key) {
+    RC4(byte[] key) {
         this.table = new int[POOL_SIZE];
 
         this.init(key);
     }
 
-    public void init(byte[] key) {
+    private void init(byte[] key) {
         this.i = 0;
         this.j = 0;
 
@@ -39,13 +35,13 @@ public class RC4 {
         this.j = 0;
     }
 
-    public void swap(int a, int b) {
+    private void swap(int a, int b) {
         int k = this.table[a];
         this.table[a] = this.table[b];
         this.table[b] = k;
     }
 
-    public byte next() {
+    private byte next() {
         i = ++i & (POOL_SIZE - 1);
         j = (j + table[i]) & (POOL_SIZE - 1);
         swap(i, j);

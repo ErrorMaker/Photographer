@@ -8,20 +8,22 @@ import java.util.Random;
 
 public class DiffieHellman
 {
-    private int BITLENGTH = 31;
+    private int BITLENGTH = 30;
     private static BigInteger Prime;
     private static BigInteger Generator;
-    public BigInteger PrivateKey;
-    public BigInteger PublicKey;
+    private BigInteger PrivateKey;
+    BigInteger PublicKey;
     private BigInteger PublicClientKey;
-    public BigInteger SharedKey;
+    BigInteger SharedKey;
 
-    public DiffieHellman(BigInteger prime, BigInteger generator)
+
+
+    DiffieHellman(BigInteger prime, BigInteger generator)
     {
         Prime = prime;
         Generator = generator;
 
-        this.PrivateKey = new BigInteger(GenerateRandomHexString(256), 16);
+        this.PrivateKey = new BigInteger(GenerateRandomHexString(BITLENGTH), 16);
         if (Generator.intValue() > Prime.intValue())
         {
             BigInteger temp = Prime;
@@ -31,7 +33,7 @@ public class DiffieHellman
         this.PublicKey = Generator.modPow(this.PrivateKey, Prime);
     }
 
-    public void GenerateSharedKey(byte[] ckey)
+    void GenerateSharedKey(byte[] ckey)
     {
         this.PublicClientKey = new BigInteger(ckey);
 
