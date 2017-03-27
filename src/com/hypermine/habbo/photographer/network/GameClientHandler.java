@@ -35,15 +35,6 @@ public class GameClientHandler extends ChannelInboundHandlerAdapter {
                 },
                 2000
         );
-
-        new java.util.Timer().schedule(
-                new java.util.TimerTask() {
-                    @Override
-                    public void run() {
-                        s.sendMessage(new IdkNameComposer(s.sharedKey).compose());
-                    }
-                }, 6000
-        );
     }
 
     @Override

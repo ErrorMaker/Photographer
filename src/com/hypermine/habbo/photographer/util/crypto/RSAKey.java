@@ -119,9 +119,7 @@ public class RSAKey {
             //Console.WriteLine("RSA Encrypt: Message is to big!");
         }
 
-        BigInteger value = new BigInteger(text, 16);
-
-        BigInteger m = new BigInteger(this.pkcs1pad2(value.toByteArray(), this.getBlockSize()));
+        BigInteger m = new BigInteger(this.pkcs1pad2(text.getBytes(), this.getBlockSize()));
         if (m.equals(BigInteger.ZERO))
         {
             return null;

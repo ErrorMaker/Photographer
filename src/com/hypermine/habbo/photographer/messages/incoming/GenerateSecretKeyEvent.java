@@ -1,6 +1,6 @@
 package com.hypermine.habbo.photographer.messages.incoming;
 
-import com.hypermine.habbo.photographer.util.crypto.HabboEncryption;
+import com.hypermine.habbo.photographer.messages.outgoing.IdkNameComposer;
 
 /**
  * Created by Scott Stamp <scott@hypermine.com> on 3/25/2017.
@@ -11,14 +11,9 @@ public class GenerateSecretKeyEvent extends MessageHandler {
         String prime = this.packet.readString();
         String gen = this.packet.readString();
 
-        String sharedKey = new HabboEncryption().GetHandshakePublic(prime, gen);
+        client.habboEncryption.VerifyDHPrimes(prime, gen);
 
-        ctx.sharedKey = sharedKey;
-
-//        ServerMessage msg = new ServerMessage(539);
-//        msg.appendString(sharedKey);
-//        IdkNameComposer composer = new IdkNameComposer(sharedKey);
-//        ctx.writeAndFlush(composer.compose().get());
-//        ctx.sendMessage(msg);
+        IdkNameComposer composer = new IdkNameComposer(client.habboEncryption.GetDHPublic());
+        client.sendMessage(composer.compose());
     }
 }

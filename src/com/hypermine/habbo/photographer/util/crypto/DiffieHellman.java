@@ -60,9 +60,9 @@ public class DiffieHellman
         this.PublicKey = Generator.modPow(this.PrivateKey, Prime);
     }
 
-    public void GenerateSharedKey(String ckey)
+    public void GenerateSharedKey(byte[] ckey)
     {
-        this.PublicClientKey = new BigInteger(ckey, 10);
+        this.PublicClientKey = new BigInteger(ckey);
 
         this.SharedKey = this.PublicClientKey.modPow(this.PrivateKey, Prime);
     }

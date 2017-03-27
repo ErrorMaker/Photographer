@@ -3,8 +3,8 @@ package com.hypermine.habbo.photographer.messages;
 import com.hypermine.habbo.photographer.Session;
 import com.hypermine.habbo.photographer.messages.incoming.GenerateSecretKeyEvent;
 import com.hypermine.habbo.photographer.messages.incoming.MessageHandler;
+import com.hypermine.habbo.photographer.messages.incoming.SharedKeyEvent;
 import gnu.trove.map.hash.THashMap;
-import io.netty.channel.ChannelHandlerContext;
 
 /**
  * Created by Scott Stamp <scott@hypermine.com> on 3/25/2017.
@@ -16,6 +16,7 @@ public class PacketManager {
         this.incoming = new THashMap<>();
 
         registerHandler(3840, GenerateSecretKeyEvent.class);
+        registerHandler(3224, SharedKeyEvent.class);
     }
 
     public void registerHandler(Integer header, Class<? extends MessageHandler> handler) throws Exception {
@@ -34,7 +35,7 @@ public class PacketManager {
             if (this.isRegistered(packet.getMessageId())) {
                 final MessageHandler handler = this.incoming.get(packet.getMessageId()).newInstance();
 
-                handler.ctx = ctx;
+                handler.client = ctx;
                 handler.packet = packet;
                 handler.handle();
             }
