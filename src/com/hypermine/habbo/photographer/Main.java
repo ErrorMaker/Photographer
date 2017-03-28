@@ -13,6 +13,9 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.logging.LoggingHandler;
 import io.netty.handler.timeout.IdleStateEvent;
 import io.netty.handler.timeout.IdleStateHandler;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
+
+import java.security.Security;
 
 /**
  * Created by Scott Stamp <scott@hypermine.com> on 3/25/2017.
@@ -22,6 +25,8 @@ public class Main {
     public static ThreadPooling threadPooling;
 
     public static void main(String[] args) {
+        Security.addProvider(new BouncyCastleProvider());
+
         String host = "game-us.habbo.com";
         int port = 38101;
         EventLoopGroup workerGroup = new NioEventLoopGroup();

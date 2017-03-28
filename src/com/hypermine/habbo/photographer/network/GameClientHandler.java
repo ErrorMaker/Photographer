@@ -20,21 +20,16 @@ import io.netty.util.AttributeKey;
 public class GameClientHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelRegistered(ChannelHandlerContext ctx) {
-        System.out.println("Connected, I think?");
-
         Session s = new Session(ctx.channel());
-        ctx.attr(AttributeKey.valueOf("session")).set(s);
+        ctx.channel().attr(AttributeKey.valueOf("session")).set(s);
+    }
 
-        new java.util.Timer().schedule(
-                new java.util.TimerTask() {
-                    @Override
-                    public void run() {
-                        s.sendMessage(new ReleaseVersionComposer().compose());
-                        s.sendMessage(new InitCryptoComposer().compose());
-                    }
-                },
-                2000
-        );
+    @Override
+    public void channelActive(ChannelHandlerContext ctx) {
+        Session s = (Session) ctx.channel().attr(AttributeKey.valueOf("session")).get();
+
+        s.sendMessage(new ReleaseVersionComposer().compose());
+        s.sendMessage(new InitCryptoComposer().compose());
     }
 
     @Override

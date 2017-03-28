@@ -16,8 +16,6 @@ public class DiffieHellman
     private BigInteger PublicClientKey;
     BigInteger SharedKey;
 
-
-
     DiffieHellman(BigInteger prime, BigInteger generator)
     {
         Prime = prime;
